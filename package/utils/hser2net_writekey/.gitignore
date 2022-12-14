@@ -1,0 +1,20 @@
+*.iml
+*.bat
+*.apk
+# app用到zip的请忽略
+*.zip
+# 自定义了local.properties的请删除这条
+*.properties
+/captures
+~$*
+gradlew
+.DS_Store
+.idea
+.gradle
+# 自定义了根目录gradle/gradle-wrapper.properties的请删除这条（不推荐自定义）
+gradle
+build
+8266_hid_sample
+.metadata
+blueled.bin
+*.o

@@ -1,0 +1,19 @@
+Index: procd-2018-01-22-9a4036fb/system.c
+===================================================================
+--- procd-2018-01-22-9a4036fb.orig/system.c	2021-08-14 14:02:39.289768471 +0800
++++ procd-2018-01-22-9a4036fb/system.c	2021-08-14 14:03:45.488652468 +0800
+@@ -53,6 +53,14 @@
+ 		blobmsg_add_string(&b, "kernel", utsname.release);
+ 		blobmsg_add_string(&b, "hostname", utsname.nodename);
+ 	}
++    //GET Ver
++    ///etc/hlk_version
++    if ((f = fopen("/etc/hlk_version", "r")) != NULL) {
++        while(fgets(line, sizeof(line), f)) {
++            blobmsg_add_string(&b, "hlkver", line);
++        }
++        fclose(f);
++    }
+ 
+ 	if ((f = fopen("/proc/cpuinfo", "r")) != NULL)
+ 	{

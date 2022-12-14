@@ -1,0 +1,20 @@
+Source-Makefile: package/mtk/applications/bndstrg_plus/Makefile
+Package: bndstrg_plus
+Submenu: Applications
+Version: 1
+Depends: +libc +SSP_SUPPORT:libssp +USE_GLIBC:librt +USE_GLIBC:libpthread +libpthread +librt
+Conflicts: 
+Menu-Depends: 
+Provides: 
+Section: MTK Properties
+Category: MTK Properties
+Repository: base
+Title: Band Steering Daemon Support Tri-Band
+Maintainer: 
+Source: bndstrg_plus-2dac8d0b.tar.bz2
+Type: ipkg
+Description:   Band Steering  Daemon For support MT7615 New Band Steering
+
+@@
+
+

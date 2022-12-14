@@ -1,0 +1,44 @@
+Index: linux-4.4.198/drivers/net/wireless/mediatek/mt_wifi/embedded/common/rt_led.c
+===================================================================
+--- linux-4.4.198.orig/drivers/net/wireless/mediatek/mt_wifi/embedded/common/rt_led.c
++++ linux-4.4.198/drivers/net/wireless/mediatek/mt_wifi/embedded/common/rt_led.c
+@@ -773,19 +773,34 @@ VOID LEDControlTimer(
+ 
+ #endif /* LED_CONTROL_SUPPORT */
+ 
+-
+ INT RTMPSetLED(RTMP_ADAPTER *pAd, UCHAR Status, UCHAR BandIdx)
+ {
++       char *net_name = NULL;
+ #ifdef RTMP_MAC_PCI
+ 
+-	if (IS_PCI_INF(pAd) || IS_RBUS_INF(pAd)) {
++       if (IS_PCI_INF(pAd) || IS_RBUS_INF(pAd)) {
+ #ifdef LED_CONTROL_SUPPORT
+-		RTMPSetLEDStatus(pAd, Status, BandIdx);
++               //RTMPSetLEDStatus(pAd, Status, BandIdx);
++               net_name = RTMP_OS_NETDEV_GET_DEVNAME(pAd->net_dev);
++               if (DBDC_BAND0 == BandIdx) {    //2.4G
++                       if (LED_RADIO_OFF == Status || LED_LINK_DOWN == Status) {
++                               rtmp_control_led_cmd(pAd, 0, 0, 0, 0, 0, 0, 0, 0);
++                       } else if (LED_LINK_UP == Status || LED_RADIO_ON == Status) {
++                               rtmp_control_led_cmd(pAd, 0, 0, 0, 0, 0, 0, 0, 3);
++                       }
++               } else if (DBDC_BAND1 == BandIdx) {
++                       if (LED_RADIO_OFF == Status || LED_LINK_DOWN == Status) {
++                               rtmp_control_led_cmd(pAd, 1, 0, 0, 0, 0, 0, 0, 0);
++                       } else if (LED_LINK_UP == Status || LED_RADIO_ON == Status) {
++                               rtmp_control_led_cmd(pAd, 1, 0, 0, 0, 0, 0, 0, 3);
++                       }
++               }
++               //rtmp_control_led_cmd(pAd, led_param[0], led_param[1], led_param[2], led_param[3], led_param[4], led_param[5], led_param[6], led_param[7]);
+ #endif /* LED_CONTROL_SUPPORT */
+-	}
++       }
+ 
+ #endif /* RTMP_MAC_PCI */
+-	return TRUE;
++       return TRUE;
+ }
+ 
+ void LED_WLAN_2G_init(RTMP_ADAPTER *pAd, UINT8 led_index)

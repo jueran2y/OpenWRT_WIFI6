@@ -1,0 +1,35 @@
+#!/bin/sh
+
+. /lib/functions.sh
+
+OVERLAY="$( grep ' /overlay ' /proc/mounts )"
+
+case "$ACTION" in
+pressed)
+	[ -z "$OVERLAY" ] && return 0
+
+	return 5
+;;
+timeout)
+	. /etc/diag.sh
+	set_state failsafe
+;;
+released)
+	if [ "$SEEN" -lt 1 ]
+	then
+		echo "outtrans" > /dev/console
+		killall -USR1 hser2net
+	elif [ "$SEEN" -lt 5 -a -n "$OVERLAY" ]
+	then
+		echo "REBOOT" > /dev/console
+		sync
+		reboot
+	elif [ "$SEEN" -lt 10 -a -n "$OVERLAY" ]
+	then
+		echo "FACTORY RESET" > /dev/console
+		jffs2reset -y && reboot &
+	fi
+;;
+esac
+
+return 0
